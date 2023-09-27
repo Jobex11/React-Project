@@ -1,0 +1,372 @@
+  REVIEW
+Start 19:45
+Stop 50:17
+
+
+
+
+1. App.js
+
+=> This code fetches tour data from an external API.It provides a loading 
+indicator while fetching data and allows the user to remove individual tours.
+
+
+
+=>  const removeTour = (id) => {
+    const newTours = tours.filter((tour) => tour.id !== id);
+    setTours(newTours);
+  };
+
+-removeTour is a javascript function used withing a react component to 
+remove a tour with a specific id form a list of tours.
+
+->[const removeTour = (id) => {...}]
+
+- this line declares a function named removeTour that takes an id as its
+parameter.
+
+-> [ const newTours = tours.filter((tour) => tour.id !==id) ]
+-inside the removeTour function it uses the filter method on the tours array.
+-the [filter] method iterates through each tour object in the tours array
+and checked whether the id of the current tour is not equal (!==) to
+the provided id argument.
+
+-if the id of a tour is not equal to the specific id, it includes that tour
+in the newTours array
+
+- this line creates a new array called newTours that contains all tours
+except the one with the provided id. It effectively filters out the tour 
+with the specified id from the array.
+
+-> [setTours(newTours] 
+-after filtering the tours to create the newTours array, this line sets the
+components tours state to the newTours array.
+-setTours is used to update the state,
+
+
+
+=> What is Asynchronous programming?
+Aynchronour programming is a programming paradigm that deals with tasks 
+that may not complete immediately or in a linear, sequential fashion.
+It allows a program to execute multiple tasks concurrently without 
+blocking the main thread of execution.
+-Tasks run independently in asyn programming
+
+-> KEY CHARACTER OF ASYNCHRONOUS PROGRAMMING 
+- Non blocking  - concurrency  - callback  - promises  -async/await
+=>Why Asynchronous programming
+-FETCHING DATA: data from external sources such as APIs or databases.
+data fetching operations are typically asynchronous because they may take some 
+time to complete, and you don't want to block the entire application 
+while waiting for the data to arrive.
+-NON-BLOCKING CODE:javascript is a single-threaded language, which means
+ it can only execute one task at a time.Asynchronouse functions allow 
+you to perform tasks in the background  (like fetching the data) without
+blocking the main thread.this is crucial for keeping th user interface responsive
+ and preventing it from freezing.
+- USER EXPERIENCE: users don't have to wait for everything to complete
+ before interacting with the app.
+-PROMISES AND ASYNC/AWAIT: react developers often use async/await when
+ dealing with asynchronous operations, making code easier to understand and manage.
+-STATE UPDATE:React itself  asynchronously updates when ever you called
+ setState to avoid unneccessary rerender.
+- EVENT HANDLING: handling user events like button clicks or form
+submissions triggers asynchronous operations, and you will want to ensure
+ theses operations do not block the UI.
+-TIMEOUTS AND INTERVALS: Asynchronous functions are used for tasks that
+involve timeouts(setTimeout) or intervals (setInterval).These functions
+ schedule code to run at a later time without blocking the main thread.
+-ERROR  HANDLING: using try...catch -> asynchronous code allows you to 
+catch and handle errors that occur during asynchronous operations, preventing
+ them from crashing the entire application.
+
+-> In summary, asynchronous functions are important in react cause it 
+handles asynchronous tasks without disrupting the user experience or causing 
+performance issues.
+
+=> const fetchTours = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(url);
+      const tours = await response.json();
+      setLoading(false);
+      setTours(tours);
+    } catch (error) {
+      setLoading(false);
+      con
+sole.log(error);
+    }
+  };
+
+-The above code can be explained as below using a comment.
+
+const fetchTours = async () => {
+  setLoading(true); // Set loading state to true, indicating that data is being fetched.
+
+  try {
+    const response = await fetch(url); // Send a GET request to the specified 'url'.
+    const tours = await response.json(); // Parse the response as JSON and store it in the 'tours' variable.
+
+    setLoading(false); // Set loading state to false, indicating that data fetching is complete.
+    setTours(tours); // Update the component's state with the fetched 'tours' data.
+  } catch (error) {
+    setLoading(false); // Set loading state to false in case of an error.
+    console.log(error); // Log any error that occurred during the fetch operation.
+  }
+};
+
+-> fetchTours: 
+- is an asynchronous function defined using the async keyword. It appears
+ to be a function used for fetching tour data
+-> setLoading(true)
+- Is called to set a loading state to true. when the function starts fetching data.
+This is often used in react components to show a loading spinner
+or a message to the user.
+-> TRY
+-> const response = await fetch(url): sends a GET request to the specific [url].
+the await keyword is used to pause the execution until the promise returned
+ by fetch is resolved.
+->const tours =  await response.json():
+parses the response from the APi as JSON stores it in the tours variable.
+-> setLoading(false): is vcalled to set the loading state to false.
+Indicating that data fetching is complete.
+-> setTours(tours): is called to update the component state with the 
+fetched tour data. This likely assumes that there is a state variable called tours in the
+ component that is being updated with the fetched data.
+
+-> CATCH
+-> in case of an error(if the try block fails) the code inside the catch block is 
+executed:
+-> setLoading(false): is called to set the loading state to false to handle 
+to handle the loading state when an error occurs.
+-> console.log(error) -> is used to log the error to the console for debugging purposes.
+
+
+=> if (loading) {
+    return (
+      <main>
+        <Loading />
+      </main>
+    );
+  }
+  if (tours.length === 0) {
+    return (
+      <main>
+        <div className="title">
+          <h2>no tours left</h2>
+          <button className="btn" onClick={() => fetchTours()}>
+            refresh
+          </button>
+        </div>
+      </main>
+    );
+  }
+  return (
+    <main>
+      <Tours tours={tours} removeTour={removeTour} />
+    </main>
+  );
+}
+
+=>  <Tours tours={tours} removeTour={removeTour} />
+-tours={tours}: this is passing a prop named tours to the 
+Tours component. Props are a way to pass data from a parent component
+ to a child component in react. here, passing a variable or value called 
+tours to the Tours component.
+-> removeTour={removeTour}: This is passing another prop named removeTour
+ to the Tours component. Similar to the tours prop, it's passing a 
+function called removeTour to the Tours component.
+
+
+-> The code provided above happens to be a 
+[render or a return function].
+-> This component appears to be responsible for displaying content based on
+ the state of loading and the content of the tours array.
+
+
+2. Tours.js
+
+const Tours = ({ tours, removeTour }) => {
+  return (
+    <section>
+      <div className="title">
+        <h2>Our Tours</h2>
+        <div className="underline"></div>
+      </div>
+      <div>
+        {tours.map((tour) => {
+          return <Tour key={tour.id} {...tour} removeTour={removeTour}></Tour>;
+        })}
+      </div>
+    </section>
+  );
+};
+
+-> This component is defining a react component called Tours.
+- It defines a functional component called Tours.
+- Props: It accepts two props-> [tours and removeTour].
+tour props: is expected to be an array of tour objects.It represents
+ a lists of tours that this component will render.
+removeTour props: this is a function used to remove a tour.The purpose 
+of this function is likely to allow users to remove tours from the list.
+
+-> Rendered JSX
+- component returns jsx(javascript xml) within the return statement.
+- Here, Within the div, it maps over the tours array using the map
+ method and generates a <Tour> component for each tour in the array.
+The key prop is set to tour.id to helpt react efficiently update and re-render
+the list when needed.
+-spread operator{..tour}: is used to pass all properties of the tour
+object as props to the <Tour> component.
+-removeTour: this props is passed to each <Tour> component presumably to allow
+ users to trigger the removal of a tour. 
+
+
+
+
+
+3.Tour.js
+
+contains the a single tour.
+
+=><p>
+          {readMore ? info : `${info.substring(0, 200)}...`}
+          <button onClick={() => setReadMore(!readMore)}>
+            {readMore ? "show less" : "read more"}
+          </button>
+        </p>
+
+-> This is an example of components that toggles betweeen displaying a 
+truncated version of some information and showing the full information
+ when a  "Read More" button is clicked. 
+=> {readMore ? info : ${info.substring(0, 200)}...}
+-this is a conditional expression (ternary operator) in jsx.
+-It checks the value of the readMore state variable
+-If readMore is true, it displays the entire info content.
+-If readMore is false, it dispalys a truncated version of info.
+(showing only the first 200 characters followed by ellipsis)
+
+=><button onClick={() => setReadMore(!readMore)}>
+            {readMore ? "show less" : "read more"}
+          </button>
+
+-is an  button element with an onlcick event handler.
+-when element is clicked it calls the setReadMore function and toggles the value
+ of the readMore state variable between true and false.
+
+=> <button className="delete-btn" onClick={() => removeTour(id)}>
+          not interested
+        </button>
+
+-> ()=>removeTour(id):
+- this is an arrow function that serves as the event handler for the
+button.
+- removeTour is a function to handle the removal or "not interested"
+action related to a tour or item.
+- It takes id as an argument which suggests that identifies the specific 
+tour or item to be removed form some collection or data structure.
+
+=> A Ternary operator also known as the conditional operator is 
+shorthand way to write a simple conditional statements in many 
+programming languages including javascript.
+
+[condition ? expression-if-true : expressiong-if-false]
+-If expression is true the expression before the ? is  evaluated. 
+otherwise after the : is evaluated.
+
+[
+const isRaining = true;
+const weather = isRaining ? 'Bring an umbrella': 'Leave the umbrella'
+console.log(weather);
+]
+
+- > in this example if isRaining is true, it sets the weather variable to 
+'Bring an umbrella' and if isRaining is false it sets the 
+weather to 'Leave the umbrella at home'
+
+-Ternary operator is useful for writing concise conditional logic, especially when you want to 
+assign a value to a variables based on a condition.
+
+  CSS
+=> Global Css
+/* global-variables.css */
+
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --font-family: 'Arial', sans-serif;
+}
+
+/* global.css */
+
+:root {
+  --primary-color: #0073e6;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+
+=> MEDIA QUERY
+-> Basic media query syntax
+/* This CSS rule applies when the viewport width is 600px or wider */
+@media screen and (min-width: 600px) {
+  /* Your CSS styles for screens wider than 600px go here */
+}
+
+/* This CSS rule applies when the viewport width is 900px or narrower */
+@media screen and (max-width: 900px) {
+  /* Your CSS styles for screens narrower than 900px go here */
+}
+
+
+-> Combining media query conditions
+/* This CSS rule applies when the viewport width is between 600px and 900px */
+@media screen and (min-width: 600px) and (max-width: 900px) {
+  /* Your CSS styles for screens between 600px and 900px go here */
+}
+
+
+->Using media query for different devices.
+/* This CSS rule applies when the device is in landscape orientation */
+@media screen and (orientation: landscape) {
+  /* Your CSS styles for landscape orientation go here */
+}
+
+/* This CSS rule applies when the device has a high-resolution display (Retina) */
+@media screen and (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Your CSS styles for high-resolution displays go here */
+}
+
+
+->applying media queries to print styles
+/* This CSS rule applies when the document is printed */
+@media print {
+  /* Your CSS styles for printed documents go here */
+}
+
+
+-> combining media queries for complex conditions
+/* This CSS rule applies when the viewport width is between 600px and 900px
+   AND the device is in landscape orientation */
+@media screen and (min-width: 600px) and (max-width: 900px) and (orientation: landscape) {
+  /* Your CSS styles for this combination of conditions go here */
+}
+
+
+
+
+
+LEARN
+-Asynchronou programming.
+-Ternary Operator
+-map function
+-
+-> Machine learning is the ability to find patterns in data.

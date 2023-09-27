@@ -1,0 +1,139 @@
+         ACCORDION 
+Start: 
+End: 1:21:31
+End: 1:27:36
+
+========
+ App.js  
+========
+
+import React, { useState } from "react";
+import data from "./data";
+import SingleQuestion from "./Question";
+function App() {
+  const [questions, setQuestions] = useState(data);
+  return (
+    <main>
+      <div className="container">
+        <h3>questions and answers about login</h3>
+        <section className="info">
+          {questions.map((question) => {
+            return <SingleQuestion key={question.id} {...question} />;
+          })}
+        </section>
+      </div>
+    </main>
+  );
+}
+
+export default App;
+
+
+1. 
+const [questions, setQuestions] = useState(data);
+
+-It declares a state variables question using useState hook. 
+-it initialize the "questions" with the data imported from the "data" file 
+
+2. 
+{questions.map((question) => {
+            return <SingleQuestion key={question.id} {...question} />;
+          })} 
+
+- .map() : 
+is a javascript array method that iterates over each element in the "questions" array 
+and returns a new array with transformed elements. 
+- for each "question" object in the "questions" array, a new instance of the 
+"SingleQuestion" component is rendered. 
+->  "key" props is set to "question.id"
+-The key prop is  used by Reactt to uniquel identify each rendered element
+ withing a list. 
+ It help react optimize updates and re-renders when the list changes. 
+ Each question is expected to have a unique "id" property. 
+
+-> the "key" prop is followed by the spread operator "{...question}"
+- this spread all the properties of the "question" object as indivitual props to 
+the "SingleQuestion" component. 
+- This is a concise way to pass all the properties of the "question" 
+objeect as props to "SingleQuestion"
+
+=> This code iterates over an array of questions, rendering each questions as a 
+"SingleQuestion" component.
+It uses the "key" prop to ensure that React can efficiently update and 
+manage the list of questions. And  it passes all the properties of each 
+question as individual props to the "SingleQuestion" component
+
+========
+ data.js 
+========
+
+const questions = [
+  {
+    id: 1,
+    title: 'Do I have to allow the use of cookies?',
+    info:
+      'Unicorn vinyl poutine brooklyn, next level direct trade iceland. Shaman copper mug church-key coloring book, whatever poutine normcore fixie cred kickstarter post-ironic street art.',
+  },
+  {
+    id: 2,
+    title: 'How do I change my My Page password?',
+    info:
+      'Coloring book forage photo booth gentrify lumbersexual. Migas chillwave poutine synth shoreditch, enamel pin thundercats fashion axe roof party polaroid chartreuse.',
+  }, ] 
+
+  export default question; 
+
+-> this a way to create a data that can be imported to anypart of the file. 
+
+
+========
+ Question.js
+========
+
+
+1. 
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"; 
+
+- Two icons are imported form the "react-icons/ai" library. 
+-These icons will be used to toggle the visibility of the answer.
+
+2. 
+const Question = ({ title, info }) => {
+  const [showInfo, setShowInfo] = useState(false);
+  return {...};
+}
+
+- code defines a functional React component called "Question"
+- it takes two props -> title, info 
+
+3. 
+ <button onClick={() => setShowInfo(!showInfo)} > .... 
+
+ - This is an event handler attached to the buttons "onclick" event.
+ 
+ - > setShowInfo(!showInfo) 
+ - It toggles the value of "showInfo" state variables
+ - if "showInfo" is currently true, it will becomes false. vice versa 
+ 
+ ->
+ <button> {showInfo ? <AiOutlineMinus /> : <AiOutlinePlus />}  </button>
+
+- It is the content of the button, and it consists of a conditional expression 
+- when "showInfo"  is true it displays the  "<AiOutlineMinus /> "
+- when "showInfo" is false it displays the "<AiOutlinePlus />"
+
+=> This is a common pattern for implemeneting toggle buttons or expand/collapse
+ functionality in React components.
+
+
+
+
+
+
+
+
+
+
+========
+ index.css  
+========

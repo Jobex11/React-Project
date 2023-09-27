@@ -1,0 +1,330 @@
+        REVIEW
+Start:
+End: 1:17:27
+
+for the icons => npm install react-icons --save
+
+
+========
+index.js
+=======
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+=>  
+1. the code begins by importing two essential modules form the "react" and
+ "react-dom/client" packages.
+- React is imported form  'react' to enable the use of React elements and 
+components.
+- "ReactDOM" imported from "react-dom/client" to render React component into the 
+DOM.
+
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import './index.css';
+import App from './App';
+
+
+- import "App" component form "./App" -> whih is the 
+root component of the React Application.
+
+2. 
+const root = ReactDOM.createRoot(document.getElementById("root"));
+- create root for rendering the React components into the DOM.
+- It targets the DOm element with the ID 'root' as the container where the 
+React application will be rendered.
+- The 'root' element is typicaly a <div> in the HTML file 
+
+3. 
+-"root.render(...)" is used to render the 'App' components n the specified 
+root element. 
+- <React.StrictMode>
+-> is wrapped around the app component. 
+=> StrictMode is a built-in react component that helps to detect potential 
+issues in the application and provides warnings during development. 
+-It also ensures the best react practice. 
+
+-> StrictMode is wrapper component that enables strict mode in the entire 
+application. 
+-> In strict mode, React performs additional checks and warnings 
+during developments to help developers identify and fix potential issues.
+
+
+
+
+========  
+ Review.js
+=======
+
+
+import React, { useState } from "react";
+import people from "./data";
+import { FaChevronLeft, FaChevronRight, FaQuoteRight } from "react-icons/fa";
+
+const Review = () => {
+  const [index, setIndex] = useState(0);
+  const { name, job, image, text } = people[index];
+  const checkNumber = (number) => {
+    if (number > people.length - 1) {
+      return 0;
+    }
+    if (number < 0) {
+      return people.length - 1;
+    }
+    return number;
+  };
+  const nextPerson = () => {
+    setIndex((index) => {
+      let newIndex = index + 1;
+      return checkNumber(newIndex);
+    });
+  };
+  const prevPerson = () => {
+    setIndex((index) => {
+      let newIndex = index - 1;
+      return checkNumber(newIndex);
+    });
+  };
+
+  const randomPerson = () => {
+    let randomNumber = Math.floor(Math.random() * people.length);
+    if (randomNumber === index) {
+      randomNumber = index + 1;
+    }
+    setIndex(checkNumber(randomNumber));
+  };
+  return (
+    <article className="review">
+      <div className="img-container">
+        <img src={image} alt={name} className="person-img" />
+        <span className="quote-icon">
+          <FaQuoteRight />
+        </span>
+      </div>
+      <h4 className="author">{name}</h4>
+      <p className="job">{job}</p>
+      <p className="info">{text}</p>
+      <div className="button-container">
+        <button className="prev-btn" onClick={prevPerson}>
+          <FaChevronLeft />
+        </button>
+        <button className="next-btn" onClick={nextPerson}>
+          <FaChevronRight />
+        </button>
+      </div>
+      <button className="random-btn" onClick={randomPerson}>
+        suprise me
+      </button>
+    </article>
+  );
+};
+
+export default Review;
+
+
+1. 
+const [index, setIndex] = useState(0);
+const { name, job, image, text } = people[index];
+
+-useState(0) 
+this line initialize a state variable 'index' with an initial value of 0.
+- people[index]
+this line usese destructuring to extract properties form an object in an arryay
+called people. The 'index' variable is used to determine which object form the
+'people" array is currently being accessed.
+
+2. 
+const checkNumber = (number) => {
+    if (number > people.length - 1) {
+      return 0;
+    }
+    if (number < 0) {
+      return people.length - 1;
+    }
+    return number;
+  };
+
+=>if(number > people.length - 1){rturn 0;}
+
+- this condition checks if number passed as an argument is greater than 
+the highest valid index in the people array.
+- if condition is true it returns 0.
+
+-> if(number < 0) {return people.length -1}
+
+-this condition checks if the "number" passed as an argument is less 
+than 0
+- if it is less than 0, it returns people.length - 1. 
+this wraps around the last element in the array.
+
+->return number 
+- if neither any of the above condition is met.
+- It returns the original 'number'.
+
+=> CheckNumber function is designed to ensure that the "number" passed to it is 
+a valid index for the 'people' array.
+If  the number is out of bounds on either ends, it wraps around to the 
+opposite end of the array to ensure a valide index is returned.
+
+
+3.
+const prevPerson = () => {
+    setIndex((index) => {
+      let newIndex = index - 1;
+      return checkNumber(newIndex);
+    });
+  };
+
+->setIndex((index) => {...})
+- is a state updater function obtained from the useState hook. 
+- "setIndex" function is called with an arrow function that takes the current 
+value of "index" as its argument.
+- This pattern is commonly used with setState function in react to ensure 
+you are working with the most up-to -date state value.
+
+
+->let newIndex = index - 1
+- It decrements th current index by 1.
+
+->return checkNumber(newIndex)
+- checks whether the newIndex is with bounds and wrap around. if 
+"newIndex" is out of bounds, it returns a valid index 
+(either 0 or people.length - 1) 
+
+4. 
+const nextPerson = () => {
+    setIndex((index) => {
+      let newIndex = index + 1;
+      return checkNumber(newIndex);
+    });
+  };
+
+->  setIndex((index) => {...}); 
+- is a state updater function obtained from useState hooks . 
+-> let  newIndex = index + 1; 
+- this effectively increments the current "index" by 1.
+-> return checkNumber(newIndex) 
+- To check whether the newIndex is within bounds and to wrap if necessary. 
+- If "newIndex" is out of bounds,  it returns a valid index 
+(either 0 or people.length - 1);
+
+
+
+5.
+const randomPerson = () => {
+    let randomNumber = Math.floor(Math.random() * people.length);
+    if (randomNumber === index) {
+      randomNumber = index + 1;
+    }
+    setIndex(checkNumber(randomNumber));
+  };
+=> used to display the information of random person from a list.
+->let randomNumber = Math.floor(Math.random() * people.length);
+- It generates random integer called 'randomNumber'
+- Math.random() : generate a floating point number between 0(inclusive) and 
+1 (exclusive).
+-It then multiplies it by the length of the "people" array. 
+- It now uses "Math.floor" to round it down to the nearest integer.
+
+=> This is used to give a random index within the range of valid indices for the 
+"people" array.
+
+-> if (randomNumber === index) { randomNumber = index + 1; }
+
+- this condition checks if the randomly generated "randomNumber" is equal to 
+current "index". If they are equal, it increments "randomNumber" by 1
+- This is done that the random selection is different from the current index.
+meaning we don't want to display thesame person again from the "random" 
+button clicked 
+
+-> setIndex(checkNumber(randomNumber)) 
+- setIndex function is called to update the "index" state variable with 
+the value of "randomNumber".
+-checkNumber is called to ensure that randomNumber is withing the bounds of 
+checkNumber.
+
+
+
+=======  
+index.css 
+=======
+
+==> We are goimg to learn about how to arrange a CSS file
+-> Variables
+e.g
+:root{
+  --clr-primary: red;
+  --bg-color-main: cyan;
+}
+
+body{
+  background: var(--clr-primary);
+}
+
+-> Global styles
+e.g 
+*, h1-h6,::after,::before,ul,li,a,p, body 
+
+-> Global classes
+section, main, div, nav, footer, 
+
+-> Specific classes
+
+.....your choice
+-> Responsiveness
+* Use a responsive Design Framework
+e.g bootstrap, foundation, materialize
+
+*  Including the Viewport Meta Tag  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ensures your site scales properly on mobile devices. 
+
+* Create a [fluid grid layout using CSS]
+
+* Media Query 
+-@media (min-width: 789px){
+  /* For Screens Larger than 768px wide or Larger */
+}
+-@media (max-width: 789px){
+  /* For Screens Samller or equal to 789px */
+}
+-@media (orientation: portrait) {
+  /* Your portrait-specific styles here */
+}
+-@media (orientation: landscape) {
+  /* Your landscape-specific styles here */
+}
+
+* Use relative units 
+e.g %, em
+
+* Flexible Typography (font-size) 
+em, rem, vw, vh
+
+* Hide or reorder content using display.
+
+* performance Optimization 
+-use efficient images formats(like webP) and leverageing techniques like 
+lazy loading of images.
+
+* Cross-Browser compatibility
+-Test your website on different browsers 
+(chrom, firefox, safari, Edge)
+
+-> PHOTO EDITING 
+-Canva(web ad mobile) 
+- Photopea (web)
+- Pixlr (web and mobile) 
+- GIMP (Desktop) 
+- Paint.NET (window and desktop)
